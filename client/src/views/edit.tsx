@@ -52,6 +52,10 @@ const PromiseForm = styled.div`
   }
 `;
 
+const FormGroup = styled.div`
+  margin: .5rem 0 1.5rem;
+`;
+
 interface IPromiseEditProps {
   location: { pathname?: string };
 }
@@ -87,7 +91,13 @@ class PromiseEdit extends React.Component<IPromiseEditProps, IPromiseEditState> 
 
   public handleSubmit(values, { setSubmitting }) {
     setTimeout(() => {
-      alert(JSON.stringify(values, null, 2)); // TODO
+      fetch('/api/v1/promise/edit', {
+        body: JSON.stringify(values),
+        headers: {
+          'content-type': 'application/json',
+        },
+        method: 'POST',
+      });
       setSubmitting(false);
     }, 400);
   }
@@ -125,35 +135,40 @@ class PromiseEdit extends React.Component<IPromiseEditProps, IPromiseEditState> 
             >
               {({ isSubmitting }) => (
                 <Form>
-                  <Field type="text" name="what" />
-                  <ErrorMessage name="what" component="div" />
+                  <FormGroup>
+                    <Field type="text" name="what" />
+                    <ErrorMessage name="what" component="div" />
+                  </FormGroup>
 
-                  <Field component="textarea" name="note" />
-                  <ErrorMessage name="note" component="div" />
+                  <FormGroup>
+                    <label htmlFor="note">Description</label>
+                    <Field component="textarea" name="note" />
+                    <ErrorMessage name="note" component="div" />
+                  </FormGroup>
 
-                  <div>
+                  <FormGroup>
                     <Field label='void' type="checkbox" name="void" />
                     <label htmlFor="void">Voided?</label>
                     <ErrorMessage name="void" component="div" />
-                  </div>
+                  </FormGroup>
 
-                  <div>
+                  <FormGroup>
                     <label htmlFor='tini'>Created Date</label>
                     <Field component={DatePicker} name="tini" />
                     <ErrorMessage name="tini" component="div" />
-                  </div>
+                  </FormGroup>
 
-                  {/* <div>
+                  <FormGroup>
                     <label htmlFor='tdue'>Due Date</label>
-                    <Field component={TimePicker} name="tdue" />
+                    <Field component={DatePicker} name="tdue" />
                     <ErrorMessage name="tdue" component="div" />
-                  </div>
+                  </FormGroup>
 
-                  <div>
+                  <FormGroup>
                     <label htmlFor='tfin'>Finish Date</label>
-                    <Field component={TimePicker} name="tfin" />
+                    <Field component={DatePicker} name="tfin" />
                     <ErrorMessage name="tfin" component="div" />
-                  </div> */}
+                  </FormGroup>
 
                   <PromiseSubmitButton type="submit" disabled={isSubmitting}>
                     Submit
